@@ -1,12 +1,16 @@
-# Backboney Autocomplete View
+# Backbone Autocomplete View
 
-Backboney Autocomplete view made with browserify style projects in mind.
+Backbone Autocomplete view made with browserify style projects in mind.
 
 It's a very straight up nested view with a filtered collection.
 
 # Usage
 
 The view exposes a simple API. It's instanciated with a pre-existing collection, and when subclassing you are able to override some of its internal methods for your own logic.
+
+## Instantiation
+
+The view takes standard parameters, `collection` etc, and also an option `minimuInputLength` if you want to restrict searching until the input length is above a certain value.
 
 ## `onSelect(<model>)` 
 
@@ -19,46 +23,48 @@ Method bound to the view instance, which is passed to `this.collection.filter(..
 
 ```javascript
 
-// example in browserified code
+var AutocompleteView = require('autocomplete-view'); // not published yet, but require it as usual
 
+// example in browserified code
 var someNames = new Backbone.Collection([{
-	name: 'Bob'
+    name: 'Bob'
 },{
-	name: 'Harry'
-}{
-	name: 'Alfred'
-}{
-	name: 'James'
-}{
-	name: 'Sylvia'
-}{
-	name: 'Maureen'
+    name: 'Barry'
+},{
+    name: 'Alfred'
+},{
+    name: 'James'
+},{
+    name: 'Sylvia'
+},{
+    name: 'Maureen'
+},{
+	name: 'Alice'
 }])
 
 var MyAutocomplete = AutocompleteView.extend({
-	onSelect: function(model){
-		console.log(model); 
-	},
-	searchMethod: function(model){ // method passed to filter(..) on the collection
-		var label = model.get('name').toLowerCase();
-		// the method is bound to the view, with current value of the user input available as `this.searchValue`
-		var searchValue = this.searchValue.toLowerCase().trim(); 
+    onSelect: function(model){
+        console.log(model); 
+    },
+    searchMethod: function(model){ // method passed to filter(..) on the collection
+        var label = model.get('name').toLowerCase();
+        // the method is bound to the view, with current value of the user input available as `this.searchValue`
+        var searchValue = this.searchValue.toLowerCase().trim(); 
 
-		if (label.indexOf(searchValue) !== -1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+        if (label.indexOf(searchValue) !== -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 });
 
-var nameCompletion = new MyAutoComplete({
-	collection: someNames
+var nameCompletion = new MyAutocomplete({
+    collection: someNames
 });
 
 nameCompletion.render();
 document.body.appendChild(nameCompletion.el);
-
 
 ```
 

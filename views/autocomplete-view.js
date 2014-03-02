@@ -4,7 +4,7 @@ var ResultsView = require('./results-view');
 
 // Captured by the keyfilter to control search results
 var keys = {
-	9: 'enter',
+	9: 'tab',
 	13: 'enter',
 	38: 'up',
 	40: 'down',
@@ -13,7 +13,7 @@ var keys = {
 
 var noop = function() {};
 
-var MIN_INPUT_LENGTH = 3;
+var MIN_INPUT_LENGTH = 0;
 
 var AutocompleteView = Backbone.View.extend({
 	tagName: 'div',
@@ -24,6 +24,7 @@ var AutocompleteView = Backbone.View.extend({
 	},
 	template: _.template('<input class="ac-user-input" type="text" /><div class="ac-results"></div>'),
 	initialize: function initialize(options) {
+		Backbone.View.prototype.initialize.apply(this,arguments);
 		options = options || {};
 
 		this.MIN_INPUT_LENGTH = options.minimumInputLength || MIN_INPUT_LENGTH;
@@ -52,10 +53,12 @@ var AutocompleteView = Backbone.View.extend({
 				case 'enter':
 					if (this.selectedModel) {
 						this._preOnSelect(this.selectedModel);
-
 					}
 					break;
 				case 'escape':
+					input.blur();
+					break;
+				case 'tab':
 					input.blur();
 					break;
 				default:
@@ -89,7 +92,14 @@ var AutocompleteView = Backbone.View.extend({
 	setSearchValue: function(value) {
 		this.searchValue = value;
 	},
+	shouldSearch: function(){
+		return this.searchValue.length > this.MIN_INPUT_LENGTH;
+	},
 	doSearch: function() {
+		if (!this.shouldSearch()) {
+			return;
+		}
+
 		this.selectedModel = null;
 		var filteredResults = this.collection.filter(this.searchMethod);
 		this.resultsCollection.reset(filteredResults);
