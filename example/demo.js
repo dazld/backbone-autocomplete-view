@@ -61,6 +61,6 @@ var nameCompletion = new MyAutocomplete({
 });
 
 nameCompletion.render();
-// document.body.appendChild(nameCompletion.el);
+document.body.appendChild(nameCompletion.el);
 
 
