@@ -10,7 +10,7 @@ The view exposes a simple API. It's instanciated with a pre-existing collection,
 
 ## Instantiation
 
-The view takes standard parameters, `collection` etc, and also an option `minimuInputLength` if you want to restrict searching until the input length is above a certain value.
+The view takes standard parameters, `collection` etc, and also an option `minimumInputLength` if you want to restrict searching until the input length is above a certain value. It defaults to zero (this might not be so great).
 
 ## `onSelect(<model>)` 
 
