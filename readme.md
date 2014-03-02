@@ -1,5 +1,7 @@
-# Backbone Autocomplete View
+# Backboney Autocomplete View
 
-Made with browserify or similar in mind.
+Backboney Autocomplete view made with browserify style projects in mind.
 
-MIT License (c) Dan Peddle 2014
+It's pretty much a straight up nested view with a filtered collection.
+
+MIT Licence (c) Dan Peddle 2014 
