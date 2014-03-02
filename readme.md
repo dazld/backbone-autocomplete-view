@@ -23,7 +23,7 @@ Method bound to the view instance, which is passed to `this.collection.filter(..
 
 ```javascript
 
-var AutocompleteView = require('autocomplete-view'); // not published yet, but require it as usual
+var AutocompleteView = require('backbone-autocomplete');
 
 // example in browserified code
 var someNames = new Backbone.Collection([{

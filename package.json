@@ -1,10 +1,15 @@
 {
   "name": "backbone-autocomplete",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.4",
+  "description": "Backbone Autocomplete view made with browserified projects in mind",
+  "keywords": ["backbone", "autocomplete"],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dazld/backbone-autocomplete-view"
   },
   "author": "Dan Peddle <dan@flarework.com>",
   "license": "MIT",
