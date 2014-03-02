@@ -1,50 +1,31 @@
 var Backbone = require('backbone');
 var _ = require('backbone/node_modules/underscore');
 
-var ItemView = Backbone.View.extend({
-	tagName: 'div',
-	className: 'ac-result',
-	template: _.template('<%= name %>'),
-	events: {
-		'click':'onSelect',
-		'mouseenter':'onHover'
-	},
-	initialize: function(options){
-		this.parentView = options.parentView;
-	},
-	onHover: function(){
-		this.parentView.trigger('highlight', this.model);
-	},
-	onSelect: function(){
-		this.parentView.trigger('chosen', this.model);
-	},
-	render: function(){
-		var html = this.template(this.model.toJSON());
-		this.$el.html(html);
-	}
-});
+var ItemView = require('./item-view');
 
 var ResultsView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'bb-autocomplete-results',
 	initialize: function initialize(options) {
 		this.views = [];
+		this.viewsByModel = {};
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		this.noResultsText = options.noResultsText || 'No results';
 		this.on('show', this.show, this);
-        this.on('hide', this.hide, this);
-        
-        var moveUp = _.bind(this.moveHighlight, this, -1);
-        var moveDown = _.bind(this.moveHighlight, this, 1);
-        this.on('up', moveUp);
-        this.on('down', moveDown);
-        this.on('highlight', this.highlight, this);
-        this.on('chosen', function(model) {
-            this.parentView.trigger('chosen', model);
-        }, this);
-        this.collection.on('reset', this.render, this);
+		this.on('hide', this.hide, this);
+
+		var moveUp = _.bind(this.moveHighlight, this, -1);
+		var moveDown = _.bind(this.moveHighlight, this, 1);
+		this.on('up', moveUp);
+		this.on('down', moveDown);
+		this.on('highlight', this.highlight, this);
+		this.on('chosen', function(model) {
+			this.parentView.trigger('chosen', model);
+		}, this);
+		this.collection.on('reset', this.render, this);
 	},
+
 	show: function show() {
 		this.$el.removeClass('hidden');
 	},
@@ -69,6 +50,7 @@ var ResultsView = Backbone.View.extend({
 		if (viewToHighlight) {
 			viewToHighlight.$el.addClass('highlight');
 			this.highlightIndex = this.collection.indexOf(model);
+			this.parentView.trigger('highlight', model);
 		}
 	},
 	moveHighlight: function(direction) {
@@ -97,24 +79,35 @@ var ResultsView = Backbone.View.extend({
 
 		this.highlight();
 	},
+	_getViewByModel: function(model) {
+		return this.viewsByModel[model.cid];
+	},
+	_createItemView: function(model) {
+		var itemView = new ItemView({
+			model: model,
+			parentView: this
+		});
+		this.viewsByModel[model.cid] = itemView;
+		return itemView;
+	},
+	_removeItemView: function() {
+
+	},
 	render: function render() {
-		
+		this.resetHighlightIndex();
 		var views = this.views;
 		_.invoke(views, 'remove');
 		this.$el.empty();
 		var frag = document.createDocumentFragment();
-		
-		this.collection.each(function(model){
-			var result = new ItemView({
-				model: model,
-				parentView: this
-			});
+
+		this.collection.each(function(model) {
+			var result = this._createItemView(model);
 			result.render();
 			frag.appendChild(result.el);
 			this.views.push(result);
 		}.bind(this));
 		this.$el.append(frag);
-		
+
 	}
 });
 
