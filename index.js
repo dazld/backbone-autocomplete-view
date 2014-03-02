@@ -20,8 +20,7 @@ var AutocompleteView = Backbone.View.extend({
 	className: 'bb-autocomplete',
 	events: {
 		'keyup .ac-user-input':'onKeyup',
-		'blur .ac-user-input':'onBlur',
-		'change .ac-user-input': 'onChange'
+		'blur .ac-user-input':'onBlur'
 	},
 	template: _.template('<input class="ac-user-input" type="text" /><div class="ac-results"></div>'),
 	initialize: function initialize(options) {
@@ -31,18 +30,13 @@ var AutocompleteView = Backbone.View.extend({
 		
 		this.collection = options.collection; // data to search against
 		this.resultsCollection = new Backbone.Collection(); // where to put results of search
-		// method on data collection which gives us results
-		// should return an array of JS objects representing the data
-		this.shouldFetch = options.shouldFetch || false;
 
+		this.searchMethod = _.bind(this.searchMethod, this);
 
 		this.resultsView = new ResultsView({
 			parentView: this,
 			collection: this.resultsCollection
 		});
-
-	},
-	setupEvents: function setupEvents(){
 
 	},
 	onKeyup: function onKeydown(evt){
@@ -62,7 +56,10 @@ var AutocompleteView = Backbone.View.extend({
 					break;
 			}
 			return false;
-		} 
+		} else {
+			this.onChange(evt);
+			this.doSearch();
+		}
 	},
 	onBlur: function onBlur(evt) {
 		this.resultsView.trigger('hide');
@@ -70,20 +67,26 @@ var AutocompleteView = Backbone.View.extend({
 	onChange: function(evt){
 		this.searchValue = evt.target.value;
 	},
-	
 	doSearch: function(){
 		var filteredResults = this.collection.filter(this.searchMethod);
 		this.resultsCollection.reset(filteredResults);
+		this.resultsView.trigger('show');
 	},
 	render: function render (){
 		this.$el.html(this.template());
+		this.resultsView.setElement(this.$('.ac-results'));
 		return this;
 	},
 	// overwritten when subclassing
-	onSelect: noop // callback that receives the model that was chosen
+	// callback that receives the model that was chosen
+	onSelect: function(model){
+		return model;
+	},
+	// function used by .filter() to determine if the item should be included in results
 	searchMethod: function searchMethod(item) {
-		var label = item.get('label');
-		if (label.indexOf(this.searchValue) !== -1) {
+		var label = item.get('name').toLowerCase();
+
+		if (label.indexOf(this.searchValue.toLowerCase().trim()) !== -1) {
 			return true;
 		} else {
 			return false;

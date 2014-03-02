@@ -2,9 +2,9 @@ var Backbone = require('backbone');
 var _ = require('backbone/node_modules/underscore');
 
 var ItemView = Backbone.View.extend({
-	tagName: 'span',
+	tagName: 'div',
 	className: 'ac-result',
-	template: _.template('<%= label %>'),
+	template: _.template('<%= name %>'),
 	events: {
 		'click':'onSelect',
 		'mouseenter':'onHover'
@@ -17,6 +17,10 @@ var ItemView = Backbone.View.extend({
 	},
 	onSelect: function(){
 		this.parentView.trigger('chosen', this.model);
+	},
+	render: function(){
+		var html = this.template(this.model.toJSON());
+		this.$el.html(html);
 	}
 });
 
@@ -24,6 +28,7 @@ var ResultsView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'bb-autocomplete-results',
 	initialize: function initialize(options) {
+		this.views = [];
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		this.noResultsText = options.noResultsText || 'No results';
@@ -38,13 +43,14 @@ var ResultsView = Backbone.View.extend({
         this.on('chosen', function(model) {
             this.parentView.trigger('chosen', model);
         }, this);
+        this.collection.on('reset', this.render, this);
 	},
 	show: function show() {
 		this.$el.removeClass('hidden');
 	},
 	hide: function hide() {
 		this.$el.addClass('hidden');
-	}
+	},
 	resetHighlightIndex: function resetHighlightIndex() {
 		this.removeHighlights();
 		this.highlightIndex = false;
@@ -92,7 +98,23 @@ var ResultsView = Backbone.View.extend({
 		this.highlight();
 	},
 	render: function render() {
-
+		
+		var views = this.views;
+		_.invoke(views, 'remove');
+		this.$el.empty();
+		var frag = document.createDocumentFragment();
+		
+		this.collection.each(function(model){
+			var result = new ItemView({
+				model: model,
+				parentView: this
+			});
+			result.render();
+			frag.appendChild(result.el);
+			this.views.push(result);
+		}.bind(this));
+		this.$el.append(frag);
+		
 	}
 });
 
