@@ -1,4 +1,5 @@
 [![NPM](https://nodei.co/npm/backbone-autocomplete.png?compact=true)](https://nodei.co/npm/backbone-autocomplete/)
+
 [![Build Status](https://travis-ci.org/dazld/backbone-autocomplete-view.png?branch=master)](https://travis-ci.org/dazld/backbone-autocomplete-view)
 
 # Backbone Autocomplete View
