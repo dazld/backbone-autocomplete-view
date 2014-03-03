@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/backbone-autocomplete.png?compact=true)](https://nodei.co/npm/backbone-autocomplete/)
+
 # Backbone Autocomplete View
 
 Backbone Autocomplete view made with browserify style projects in mind.
