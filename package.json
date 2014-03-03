@@ -2,10 +2,13 @@
   "name": "backbone-autocomplete",
   "version": "0.0.4",
   "description": "Backbone Autocomplete view made with browserified projects in mind",
-  "keywords": ["backbone", "autocomplete"],
+  "keywords": [
+    "backbone",
+    "autocomplete"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap ./test"
   },
   "repository": {
     "type": "git",
@@ -14,6 +17,10 @@
   "author": "Dan Peddle <dan@flarework.com>",
   "license": "MIT",
   "dependencies": {
-    "backbone": "~1.1.2"
+    "backbone": "~1.1.2",
+    "tap": "~0.4.8"
+  },
+  "devDependencies": {
+    "cheerio": "~0.13.1"
   }
 }
