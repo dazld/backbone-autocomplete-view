@@ -26,7 +26,7 @@ var AutocompleteView = Backbone.View.extend({
 	initialize: function initialize(options) {
 		Backbone.View.prototype.initialize.apply(this,arguments);
 		options = options || {};
-
+		this.searchField = options.searchField || 'name';
 		this.MIN_INPUT_LENGTH = options.minimumInputLength || MIN_INPUT_LENGTH;
 
 		this.collection = options.collection; // data to search against
@@ -35,6 +35,7 @@ var AutocompleteView = Backbone.View.extend({
 		this.searchMethod = _.bind(this.searchMethod, this);
 
 		this.resultsView = new ResultsView({
+			searchField: this.searchField,
 			parentView: this,
 			collection: this.resultsCollection
 		});
@@ -84,7 +85,7 @@ var AutocompleteView = Backbone.View.extend({
 	},
 	onHighlight: function(model) {
 		this.selectedModel = model;
-		var value = model.get('name');
+		var value = model.get(this.searchField);
 		this.setSearchValue(value);
 		this.$('input').val(value);
 
@@ -117,7 +118,7 @@ var AutocompleteView = Backbone.View.extend({
 	},
 	// function used by .filter() to determine if the item should be included in results
 	searchMethod: function searchMethod(item) {
-		var label = item.get('name').toLowerCase();
+		var label = item.get(this.searchField).toLowerCase();
 
 		if (label.indexOf(this.searchValue.toLowerCase().trim()) !== -1) {
 			return true;

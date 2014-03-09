@@ -16,6 +16,8 @@ The view exposes a simple API. It's instanciated with a pre-existing collection,
 
 The view takes standard parameters, `collection` etc, and also an option `minimumInputLength` if you want to restrict searching until the input length is above a certain value. It defaults to zero (this might not be so great).
 
+By default, the view uses a field called 'name' from the models in the collection for searching. If you want to set your own, you can pass it as `searchField` when instantiating.
+ 
 ## `onSelect(<model>)` 
 
 Callback fired by the view when a user selects something by clicking on it, or by pressing enter after using the arrow keys
@@ -31,19 +33,19 @@ var AutocompleteView = require('backbone-autocomplete');
 
 // example in browserified code
 var someNames = new Backbone.Collection([{
-    name: 'Bob'
+    person: 'Bob'
 },{
-    name: 'Barry'
+    person: 'Barry'
 },{
-    name: 'Alfred'
+    person: 'Alfred'
 },{
-    name: 'James'
+    person: 'James'
 },{
-    name: 'Sylvia'
+    person: 'Sylvia'
 },{
-    name: 'Maureen'
+    person: 'Maureen'
 },{
-	name: 'Alice'
+	person: 'Alice'
 }])
 
 var MyAutocomplete = AutocompleteView.extend({
@@ -51,7 +53,7 @@ var MyAutocomplete = AutocompleteView.extend({
         console.log(model); 
     },
     searchMethod: function(model){ // method passed to filter(..) on the collection
-        var label = model.get('name').toLowerCase();
+        var label = model.get(this.searchField).toLowerCase();
         // the method is bound to the view, with current value of the user input available as `this.searchValue`
         var searchValue = this.searchValue.toLowerCase().trim(); 
 
@@ -64,6 +66,7 @@ var MyAutocomplete = AutocompleteView.extend({
 });
 
 var nameCompletion = new MyAutocomplete({
+    searchField: 'person', // setting the field to use as a search
     collection: someNames
 });
 

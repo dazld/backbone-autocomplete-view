@@ -9,6 +9,7 @@ var ResultsView = Backbone.View.extend({
 	initialize: function initialize(options) {
 		this.views = [];
 		this.viewsByModel = {};
+		this.searchField = options.searchField;
 		this.collection = options.collection;
 		this.parentView = options.parentView;
 		this.noResultsText = options.noResultsText || 'No results';
@@ -84,6 +85,7 @@ var ResultsView = Backbone.View.extend({
 	},
 	_createItemView: function(model) {
 		var itemView = new ItemView({
+			searchField: this.searchField,
 			model: model,
 			parentView: this
 		});

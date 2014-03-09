@@ -17,6 +17,7 @@ var countryList = require('./data.json');
 var countries = new Backbone.Collection(countryList);
 
 var acDemo = new DemoAutocomp({
+    searchField: 'country',
 	collection: countries,
 	minimumInputLength: 1
 });
@@ -37,7 +38,7 @@ var someNames = new Backbone.Collection([{
     name: 'Sylvia'
 },{
     name: 'Maureen'
-}])
+}]);
 
 var MyAutocomplete = AutocompleteView.extend({
     onSelect: function(model){

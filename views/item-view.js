@@ -12,6 +12,7 @@ var ItemView = Backbone.View.extend({
 	},
 	initialize: function(options) {
 		this.parentView = options.parentView;
+		this.searchField = options.searchField;
 	},
 	onHover: function() {
 		this.parentView.trigger('highlight', this.model);
@@ -21,7 +22,11 @@ var ItemView = Backbone.View.extend({
 		this.parentView.trigger('chosen', this.model);
 	},
 	render: function() {
-		var html = this.template(this.model.toJSON());
+		var data = this.model.toJSON();
+
+		var html = this.template({
+			name: data[this.searchField]
+		});
 		this.$el.html(html);
 	}
 });
