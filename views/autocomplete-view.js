@@ -1,5 +1,5 @@
 var Backbone = require('backbone');
-var _ = require('backbone/node_modules/underscore');
+var _ = require('underscore');
 var ResultsView = require('./results-view');
 
 // Captured by the keyfilter to control search results
@@ -45,7 +45,7 @@ var AutocompleteView = Backbone.View.extend({
 	},
 	onKeydown: function onKeydown(evt) {
 		var input = evt.target;
-		// see if the user has pressed a key we are explicitly wanting to control 
+		// see if the user has pressed a key we are explicitly wanting to control
 		// the behaviour for
 		if (keys[evt.keyCode]) {
 			evt.preventDefault();

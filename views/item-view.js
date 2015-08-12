@@ -1,5 +1,5 @@
 var Backbone = require('backbone');
-var _ = require('backbone/node_modules/underscore');
+var _ = require('underscore');
 
 var ItemView = Backbone.View.extend({
 	tagName: 'div',

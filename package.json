@@ -17,8 +17,9 @@
   "author": "Dan Peddle <dan@flarework.com>",
   "license": "MIT",
   "dependencies": {
-    "backbone": "~1.1.2",
-    "tap": "~0.4.8"
+    "backbone": "~1.2.1",
+    "tap": "~0.4.8",
+    "underscore": "~1.8.3"
   },
   "devDependencies": {
     "cheerio": "~0.13.1"
